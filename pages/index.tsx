@@ -15,10 +15,13 @@ const Main = styled.main`
   justify-content: center;
   align-items: center;
 `;
-const BlogTitle = styled.h1`
+export const BlogTitle = styled.h1`
   margin: 0;
   line-height: 1.15;
   font-size: 4rem;
+  color: red;
+`;
+export const BlogContent = styled.p`
   color: red;
 `;
 const List = styled.li`
@@ -48,7 +51,7 @@ const Home = ({ posts }: InferGetStaticPropsType<typeof getStaticProps>) => {
   );
 };
 
-type Post = {
+export type Post = {
   userId: number;
   id: number;
   title: string;
