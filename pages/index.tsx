@@ -68,6 +68,7 @@ export default function Home({
         </Link>
         <List>
           {posts.map((post) => (
+            // eslint-disable-next-line @next/next/link-passhref
             <Link href="/posts/[id]" as={`/posts/${post.id}`} key={post.id}>
               <ListItem>
                 <PostTitle>{post.title}</PostTitle>

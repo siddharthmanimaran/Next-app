@@ -1,28 +1,37 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import { Article } from "../../components/Article";
-import { Post } from "../index";
 import {
-  InferGetStaticPropsType,
   GetStaticPropsContext,
+  InferGetStaticPropsType,
   GetStaticPaths,
 } from "next";
-import { BlogTitle, BlogContent } from "../index";
+import Head from "next/head";
+import { Article, BlogpostImage } from "@components/Article";
+import type { Post } from "../index";
 
-const BlogPost = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
+export default function BlogPost({
+  post,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
+  const { title, body } = post;
   return (
     <Article>
-      <BlogTitle>Title:{post.title}</BlogTitle>
-      <BlogContent>Content:{post.body}</BlogContent>
+      <Head>
+        <title>{title}</title>
+        <meta property="og:title" content={title} />
+      </Head>
+      <h1>{title}</h1>
+      <BlogpostImage src="/harry_and_ginny.jpeg" alt="Two cute bunnies" />
+      <p>{body}</p>
     </Article>
   );
-};
+}
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const res = await fetch("https://jsonplaceholder.typicode.com/posts");
   const posts: Post[] = await res.json();
+
   const paths = posts.map((post) => ({
     params: { id: post.id.toString() },
   }));
+
   return {
     paths,
     fallback: false,
@@ -31,21 +40,26 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps = async (context: GetStaticPropsContext) => {
   const { params } = context;
-  const emptyBlog: Post = {
-    title: "Not found",
+
+  const emptyPost: Post = {
+    title: "Post not found",
     body: "",
     id: 0,
     userId: 0,
   };
+
   if (!params?.id) {
     return {
       props: {
-        post: emptyBlog,
+        post: emptyPost,
       },
     };
   }
 
-  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+  const res = await fetch(
+    `https://jsonplaceholder.typicode.com/posts/${params.id}`
+  );
+
   const post: Post = await res.json();
 
   return {
@@ -54,5 +68,3 @@ export const getStaticProps = async (context: GetStaticPropsContext) => {
     },
   };
 };
-
-export default BlogPost;
