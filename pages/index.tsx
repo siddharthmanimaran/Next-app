@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { InferGetStaticPropsType } from "next";
 import styled from "@emotion/styled";
+import Link from "next/link";
 
 const Container = styled.div`
   padding: 0 2rem;
@@ -39,7 +40,7 @@ const Home = ({ posts }: InferGetStaticPropsType<typeof getStaticProps>) => {
 
       <Main>
         <BlogTitle>Next JS + TypeScript</BlogTitle>
-
+        <Link href="/about">About</Link>
         {posts.map((post) => (
           <ul key={post.id}>
             <List>{post.title}</List>
